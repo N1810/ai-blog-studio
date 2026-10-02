@@ -1,10 +1,10 @@
 import React from 'react'
-import WriterEditor from '../../components/WriterEditor'
+import WriterEditorWrapper from '../../components/WriterEditorWrapper'
 
 export default function NewPostPage() {
   return (
     <div>
-      <WriterEditor initialData={{}} isNew={true} />
+      <WriterEditorWrapper initialData={{}} isNew={true} />
     </div>
   )
 }

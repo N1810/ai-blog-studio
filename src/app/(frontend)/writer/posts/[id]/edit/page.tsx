@@ -3,7 +3,7 @@ import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { redirect } from 'next/navigation'
 import React from 'react'
-import WriterEditor from '../../../components/WriterEditor'
+import WriterEditorWrapper from '../../../components/WriterEditorWrapper'
 
 export default async function EditPostPage({ params }: { params: Promise<{ id: string }> }) {
   const reqHeaders = await headers()
@@ -51,7 +51,7 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
 
     return (
       <div className="space-y-6">
-        <WriterEditor initialData={post} isNew={false} />
+        <WriterEditorWrapper initialData={post} isNew={false} />
         
         {reviewHistory.docs.length > 0 && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">

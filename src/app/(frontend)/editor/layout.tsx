@@ -5,23 +5,23 @@ import config from '@/payload.config'
 import Link from 'next/link'
 import React from 'react'
 import { ThemeToggle } from '@/components/ThemeToggle'
-import { Home, FileText, PlusCircle, User, LogOut } from 'lucide-react'
+import { Home, FileText, User, LogOut, CheckSquare } from 'lucide-react'
 
-export default async function WriterLayout({ children }: { children: React.ReactNode }) {
+export default async function EditorLayout({ children }: { children: React.ReactNode }) {
   const reqHeaders = await headers()
   const payload = await getPayload({ config })
   const { user } = await payload.auth({ headers: reqHeaders })
 
-  if (!user || user.role !== 'writer') {
-    redirect('/login?returnTo=/writer')
+  if (!user || (user.role !== 'editor' && user.role !== 'admin')) {
+    redirect('/login?returnTo=/editor')
   }
 
   if (user.accountStatus === 'suspended') {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-background">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-red-600 mb-4">Account Suspended</h1>
-          <p className="text-gray-600">Your writer account has been suspended. Please contact the administrator.</p>
+          <p className="text-muted-foreground">Your account has been suspended. Please contact the administrator.</p>
         </div>
       </div>
     )
@@ -39,24 +39,20 @@ export default async function WriterLayout({ children }: { children: React.React
               </div>
               <h2 className="text-xl font-bold text-foreground tracking-tight group-hover:text-primary transition-colors">AI Blog Studio</h2>
             </Link>
-            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Writer Dashboard</p>
+            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Editor Dashboard</p>
           </div>
           <nav className="p-4 space-y-1">
-            <Link href="/writer" className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-muted-foreground rounded-md hover:bg-muted hover:text-foreground transition-colors">
+            <Link href="/editor" className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-muted-foreground rounded-md hover:bg-muted hover:text-foreground transition-colors">
               <Home size={18} />
               Overview
             </Link>
-            <Link href="/writer/posts" className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-muted-foreground rounded-md hover:bg-muted hover:text-foreground transition-colors">
-              <FileText size={18} />
-              My Posts
+            <Link href="/editor/review" className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-muted-foreground rounded-md hover:bg-muted hover:text-foreground transition-colors">
+              <CheckSquare size={18} />
+              Review Queue
             </Link>
-            <Link href="/writer/posts/new" className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-muted-foreground rounded-md hover:bg-muted hover:text-foreground transition-colors">
-              <PlusCircle size={18} />
-              Create Post
-            </Link>
-            <Link href="/writer/profile" className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-muted-foreground rounded-md hover:bg-muted hover:text-foreground transition-colors">
+            <Link href="/admin" className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-muted-foreground rounded-md hover:bg-muted hover:text-foreground transition-colors">
               <User size={18} />
-              My Profile
+              Admin Panel
             </Link>
           </nav>
         </div>
@@ -66,10 +62,10 @@ export default async function WriterLayout({ children }: { children: React.React
           </div>
           <div className="flex items-center gap-3 px-3 py-2">
             <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">
-              {user.displayName ? user.displayName[0] : (user.email ? user.email[0].toUpperCase() : 'U')}
+              {user.displayName ? user.displayName[0] : (user.email ? user.email[0].toUpperCase() : 'E')}
             </div>
             <div className="flex-1 overflow-hidden">
-              <p className="text-sm font-medium text-foreground truncate">{user.displayName || 'Writer'}</p>
+              <p className="text-sm font-medium text-foreground truncate">{user.displayName || (user.role === 'admin' ? 'Admin' : 'Editor')}</p>
               <p className="text-xs text-muted-foreground truncate">{user.email}</p>
             </div>
           </div>

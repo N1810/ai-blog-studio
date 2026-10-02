@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { submitReviewHandler } from '../endpoints/submit-review'
 import { aiGenerateHandler } from '../endpoints/ai-generate'
+import { editorActionHandler } from '../endpoints/editor-action'
 import { revalidatePath } from 'next/cache'
 import { isAdmin, isAdminOrEditor } from '../access'
 
@@ -26,6 +27,11 @@ export const Posts: CollectionConfig = {
       path: '/:id/submit',
       method: 'post',
       handler: submitReviewHandler as any,
+    },
+    {
+      path: '/:id/review-action',
+      method: 'post',
+      handler: editorActionHandler as any,
     }
   ],
   versions: {
