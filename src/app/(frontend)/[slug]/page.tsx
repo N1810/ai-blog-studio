@@ -10,21 +10,26 @@ import Link from 'next/link'
 import { ArrowLeft, Clock, Calendar, User } from 'lucide-react'
 
 export async function generateStaticParams() {
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
-  const { docs } = await payload.find({
-    collection: 'posts',
-    where: {
-      _status: {
-        equals: 'published',
+  try {
+    const payloadConfig = await config
+    const payload = await getPayload({ config: payloadConfig })
+    const { docs } = await payload.find({
+      collection: 'posts',
+      where: {
+        _status: {
+          equals: 'published',
+        },
       },
-    },
-    limit: 100,
-  })
+      limit: 100,
+    })
 
-  return docs.map((doc) => ({
-    slug: doc.slug,
-  }))
+    return docs.map((doc) => ({
+      slug: doc.slug,
+    }))
+  } catch (error) {
+    console.warn('⚠️ Skipping static params generation: DB not available or migrations not applied.', error)
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {

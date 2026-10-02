@@ -10,16 +10,22 @@ export default async function HomePage() {
   const payloadConfig = await config
   const payload = await getPayload({ config: payloadConfig })
   
-  const { docs: posts } = await payload.find({
-    collection: 'posts',
-    where: {
-      _status: {
-        equals: 'published',
+  let posts: any[] = []
+  try {
+    const { docs } = await payload.find({
+      collection: 'posts',
+      where: {
+        _status: {
+          equals: 'published',
+        },
       },
-    },
-    sort: '-publishedAt',
-    limit: 6,
-  })
+      sort: '-publishedAt',
+      limit: 6,
+    })
+    posts = docs
+  } catch (error) {
+    console.warn('⚠️ Skipping recent posts fetch: DB not available or migrations not applied.', error)
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
