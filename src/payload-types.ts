@@ -74,6 +74,7 @@ export interface Config {
     posts: Post;
     authors: Author;
     categories: Category;
+    'review-history': ReviewHistory;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -88,6 +89,7 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    'review-history': ReviewHistorySelect<false> | ReviewHistorySelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -133,6 +135,11 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  role: 'admin' | 'editor' | 'writer';
+  accountStatus: 'active' | 'suspended';
+  displayName?: string | null;
+  bio?: string | null;
+  avatar?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -198,6 +205,8 @@ export interface Tag {
  */
 export interface Post {
   id: number;
+  writer?: (number | null) | User;
+  editorialStatus?: ('draft' | 'pending_review' | 'in_review' | 'changes_requested' | 'approved' | 'rejected') | null;
   title: string;
   slug: string;
   excerpt?: string | null;
@@ -216,6 +225,7 @@ export interface Post {
     };
     [k: string]: unknown;
   } | null;
+  _markdown?: string | null;
   featuredImage?: (number | null) | Media;
   author?: (number | null) | Author;
   categories?: (number | Category)[] | null;
@@ -259,6 +269,19 @@ export interface Category {
   title: string;
   slug: string;
   description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "review-history".
+ */
+export interface ReviewHistory {
+  id: number;
+  post: number | Post;
+  reviewer: number | User;
+  action: string;
+  comment?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -313,6 +336,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'categories';
         value: number | Category;
+      } | null)
+    | ({
+        relationTo: 'review-history';
+        value: number | ReviewHistory;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -361,6 +388,11 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  role?: T;
+  accountStatus?: T;
+  displayName?: T;
+  bio?: T;
+  avatar?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -420,10 +452,13 @@ export interface TagsSelect<T extends boolean = true> {
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
+  writer?: T;
+  editorialStatus?: T;
   title?: T;
   slug?: T;
   excerpt?: T;
   content?: T;
+  _markdown?: T;
   featuredImage?: T;
   author?: T;
   categories?: T;
@@ -462,6 +497,18 @@ export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "review-history_select".
+ */
+export interface ReviewHistorySelect<T extends boolean = true> {
+  post?: T;
+  reviewer?: T;
+  action?: T;
+  comment?: T;
   updatedAt?: T;
   createdAt?: T;
 }

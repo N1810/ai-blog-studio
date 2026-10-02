@@ -28,7 +28,7 @@ export async function seedTestUser(): Promise<void> {
     collection: 'users',
     data: testUser,
     overrideAccess: true,
-  })
+  } as any)
 }
 
 /**

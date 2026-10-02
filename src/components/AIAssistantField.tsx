@@ -158,12 +158,13 @@ export const AIAssistantField: React.FC = () => {
             <div className="p-3 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-md">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Rich Text Body</span>
-                <button type="button" onClick={() => applyField('content', result.lexicalContent)} className="shrink-0 flex items-center gap-1 px-2 py-1 text-xs font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded">
-                  <CopyPlus className="w-3 h-3" /> Apply to Editor
+                <button type="button" onClick={() => navigator.clipboard.writeText(result.contentBlocks?.map((b: any) => b.type === 'h2' ? `## ${b.text}` : b.text).join('\n\n'))} className="shrink-0 flex items-center gap-1 px-2 py-1 text-xs font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded">
+                  <CopyPlus className="w-3 h-3" /> Copy Markdown
                 </button>
               </div>
+              <p className="text-xs text-slate-500 mb-2">Copy this markdown and paste it directly into the Content box. The editor will automatically format it!</p>
               <div className="text-sm text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 p-2 rounded h-32 overflow-y-auto whitespace-pre-wrap">
-                {result.contentBlocks?.map((b: any) => b.text).join('\n\n')}
+                {result.contentBlocks?.map((b: any) => b.type === 'h2' ? `## ${b.text}` : b.text).join('\n\n')}
               </div>
             </div>
           </div>

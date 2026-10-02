@@ -45,15 +45,15 @@ export default async function BlogListingPage({ searchParams }: { searchParams: 
   return (
     <div className="container mx-auto px-4 py-16 max-w-6xl">
       <header className="mb-16 text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">Our Blog</h1>
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-foreground">Our Blog</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           Insights, tutorials, and updates from our team.
         </p>
       </header>
 
       {posts.length === 0 ? (
-        <div className="text-center py-20 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800">
-          <p className="text-xl font-medium text-slate-500">No posts published yet.</p>
+        <div className="text-center py-20 bg-muted/20 rounded-2xl border border-dashed border-border">
+          <p className="text-xl font-medium text-muted-foreground">No posts published yet.</p>
         </div>
       ) : (
         <>
@@ -64,9 +64,9 @@ export default async function BlogListingPage({ searchParams }: { searchParams: 
               const categories = (post.categories || []).map(c => typeof c === 'object' ? c.title : '').filter(Boolean)
 
               return (
-                <article key={post.id} className="group flex flex-col bg-white dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                <article key={post.id} className="group flex flex-col bg-card rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                   {featuredImage && featuredImage.url ? (
-                    <Link href={`/${post.slug}`} className="relative w-full aspect-[16/10] overflow-hidden bg-slate-100 dark:bg-slate-900">
+                    <Link href={`/${post.slug}`} className="relative w-full aspect-[16/10] overflow-hidden bg-muted">
                       <Image 
                         src={featuredImage.url} 
                         alt={featuredImage.alt || post.title} 
@@ -76,32 +76,32 @@ export default async function BlogListingPage({ searchParams }: { searchParams: 
                       />
                     </Link>
                   ) : (
-                    <Link href={`/${post.slug}`} className="relative w-full aspect-[16/10] bg-slate-100 dark:bg-slate-900 flex items-center justify-center border-b border-slate-100 dark:border-slate-800 group-hover:bg-slate-200 dark:group-hover:bg-slate-800 transition-colors">
-                      <span className="text-slate-400 font-medium">No Image</span>
+                    <Link href={`/${post.slug}`} className="relative w-full aspect-[16/10] bg-muted flex items-center justify-center border-b border-border group-hover:bg-muted/80 transition-colors">
+                      <span className="text-muted-foreground/60 font-medium">No Image</span>
                     </Link>
                   )}
 
                   <div className="p-6 flex flex-col flex-1">
                     {categories.length > 0 && (
                       <div className="mb-3">
-                        <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+                        <span className="text-xs font-bold text-primary uppercase tracking-wider">
                           {String(categories[0])}
                         </span>
                       </div>
                     )}
                     
-                    <Link href={`/${post.slug}`} className="group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                      <h2 className="text-xl font-bold leading-tight mb-3 line-clamp-2">
+                    <Link href={`/${post.slug}`} className="group-hover:text-primary transition-colors">
+                      <h2 className="text-xl font-bold text-foreground leading-tight mb-3 line-clamp-2">
                         {post.title}
                       </h2>
                     </Link>
                     
-                    <p className="text-slate-600 dark:text-slate-400 text-sm line-clamp-3 mb-6 flex-1">
+                    <p className="text-muted-foreground text-sm line-clamp-3 mb-6 flex-1">
                       {post.excerpt || 'Read full article...'}
                     </p>
                     
-                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
-                      <div className="flex items-center gap-3 text-xs text-slate-500 font-medium">
+                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-border">
+                      <div className="flex items-center gap-3 text-xs text-muted-foreground font-medium">
                         {author && (
                           <span className="flex items-center gap-1"><User className="w-3.5 h-3.5" /> {author.name}</span>
                         )}
@@ -113,7 +113,7 @@ export default async function BlogListingPage({ searchParams }: { searchParams: 
                         )}
                       </div>
                       {post.readingTime && (
-                        <span className="text-xs text-slate-400 flex items-center gap-1 font-medium">
+                        <span className="text-xs text-muted-foreground/80 flex items-center gap-1 font-medium">
                           <Clock className="w-3.5 h-3.5" /> {post.readingTime}m
                         </span>
                       )}
@@ -127,25 +127,25 @@ export default async function BlogListingPage({ searchParams }: { searchParams: 
           {totalPages > 1 && (
             <div className="flex items-center justify-center gap-4">
               {hasPrevPage ? (
-                <Link href={`/blog?page=${currentPage - 1}`} className="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-md text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors">
+                <Link href={`/blog?page=${currentPage - 1}`} className="px-4 py-2 border border-border bg-card rounded-md text-sm font-medium hover:bg-muted transition-colors text-foreground">
                   Previous
                 </Link>
               ) : (
-                <button disabled className="px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-md text-sm font-medium text-slate-400 opacity-50 cursor-not-allowed">
+                <button disabled className="px-4 py-2 border border-border bg-card rounded-md text-sm font-medium text-muted-foreground opacity-50 cursor-not-allowed">
                   Previous
                 </button>
               )}
               
-              <span className="text-sm font-medium text-slate-500">
+              <span className="text-sm font-medium text-muted-foreground">
                 Page {currentPage} of {totalPages}
               </span>
 
               {hasNextPage ? (
-                <Link href={`/blog?page=${currentPage + 1}`} className="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-md text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors">
+                <Link href={`/blog?page=${currentPage + 1}`} className="px-4 py-2 border border-border bg-card rounded-md text-sm font-medium hover:bg-muted transition-colors text-foreground">
                   Next
                 </Link>
               ) : (
-                <button disabled className="px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-md text-sm font-medium text-slate-400 opacity-50 cursor-not-allowed">
+                <button disabled className="px-4 py-2 border border-border bg-card rounded-md text-sm font-medium text-muted-foreground opacity-50 cursor-not-allowed">
                   Next
                 </button>
               )}

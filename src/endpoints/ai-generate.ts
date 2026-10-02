@@ -51,6 +51,7 @@ Return ONLY valid JSON matching this schema exactly without any markdown formatt
           format: '',
           indent: 0,
           version: 1,
+          direction: 'ltr',
           children: (generatedJSON.contentBlocks || []).map((block: any) => {
             if (block.type === 'h2') {
               return {
@@ -59,6 +60,7 @@ Return ONLY valid JSON matching this schema exactly without any markdown formatt
                 format: '',
                 indent: 0,
                 version: 1,
+                direction: 'ltr',
                 children: [{ type: 'text', text: block.text, version: 1, detail: 0, format: 0, mode: 'normal', style: '' }]
               }
             }
@@ -67,6 +69,7 @@ Return ONLY valid JSON matching this schema exactly without any markdown formatt
               format: '',
               indent: 0,
               version: 1,
+              direction: 'ltr',
               children: [{ type: 'text', text: block.text, version: 1, detail: 0, format: 0, mode: 'normal', style: '' }]
             }
           })

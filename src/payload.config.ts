@@ -12,6 +12,7 @@ import { Tags } from './collections/Tags'
 import { Posts } from './collections/Posts'
 import { Authors } from './collections/Authors'
 import { Categories } from './collections/Categories'
+import { ReviewHistory } from './collections/ReviewHistory'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -23,7 +24,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Folders, Tags, Posts, Authors, Categories],
+  collections: [Users, Media, Folders, Tags, Posts, Authors, Categories, ReviewHistory],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
